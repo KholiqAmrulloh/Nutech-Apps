@@ -1,0 +1,234 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Nutech Integrasi</title>
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+    {{!-- dataTable --}}
+    <link rel="stylesheet" href="/assets/dataTable/DataTables-1.12.1/css/dataTables.bootstrap4.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>PT. Nutech Integrasi (Kholiq Amrulloh)</h2>
+        <div class="alert alert-danger" role="alert" id="itemExist">
+            <span id="pesanError">
+
+            </span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Tambah Barang</button>
+        <table class="table table-striped" id="mytable">
+            <thead>
+                <tr>
+                    <th>Foto Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Harga Beli</th>
+                    <th>Harga Jual</th>
+                    <th>Stok</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each results}}
+                <tr>
+                    <td><img src={{ foto_barang }} style="width: 110px; height: 150px;"></td>
+                    <td>{{ nama_barang }}</td>
+                    <td>{{ harga_beli }}</td>
+                    <td>{{ harga_jual }}</td>
+                    <td>{{ stok }}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id_barang="{{ id_barang }}"
+                            data-foto_barang="{{ foto_barang }}" data-nama_barang="{{ nama_barang }}"
+                            data-harga_beli="{{ harga_beli }}" data-harga_jual="{{ harga_jual }}"
+                            data-stok="{{ stok }}">Edit</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger delete"
+                            data-id="{{ id_barang }}">Delete</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal Add Produk-->
+    <form action="/save" method="post" enctype="multipart/form-data">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Barang</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="file" name="foto_barang" class="form-control" placeholder="Foto Barang"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="nama_barang" class="form-control" placeholder="Nama Barang"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="harga_beli" onkeypress="return hanyaAngka(event)"
+                                class="form-control" placeholder="Harga Beli" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="harga_jual" onkeypress="return hanyaAngka(event)"
+                                class="form-control" placeholder="Harga Jual" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="stok" onkeypress="return hanyaAngka(event)" class="form-control"
+                                placeholder="Stok" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal Update Produk-->
+    <form action="/update" method="post" enctype="multipart/form-data">
+        <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="file" name="foto_barang" class="form-control foto_barang"
+                                placeholder="Foto Barang" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="nama_barang" class="form-control nama_barang"
+                                placeholder="Nama Barang" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="harga_beli" onkeypress="return hanyaAngka(event)"
+                                class="form-control harga_beli" placeholder="Harga Beli" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="harga_jual" onkeypress="return hanyaAngka(event)"
+                                class="form-control harga_jual" placeholder="Harga Jual" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="stok" onkeypress="return hanyaAngka(event)"
+                                class="form-control stok" placeholder="Stok" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="id_barang" class="id_barang2">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal Delete Produk-->
+    <form id="add-row-form" action="/delete" method="post">
+        <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Delete Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <strong>Anda yakin mau menghapus data ini?</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="product_id" class="form-control product_id2" required>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+
+    {{!-- dataTable --}}
+    <script type="text/javascript" src="/assets/dataTable/DataTables-1.12.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/assets/dataTable/DataTables-1.12.1/js/dataTables.bootstrap4.min.js"></script>
+
+    {{!-- scriptFunction --}}
+    <script>
+        $(document).ready(function () {
+            //tampilkan data ke modal untuk edit
+            $('#mytable').on('click', '.edit', function () {
+                var id_barang = $(this).data('id_barang');
+                var nama_barang = $(this).data('nama_barang');
+                //var foto_barang = $(this).data('foto_barang');
+                var harga_beli = $(this).data('harga_beli');
+                var harga_jual = $(this).data('harga_jual');
+                var stok = $(this).data('stok');
+                $('#EditModal').modal('show');
+                //$('.foto_barang').val(foto_barang);
+                $('.nama_barang').val(nama_barang);
+                $('.harga_beli').val(harga_beli);
+                $('.harga_jual').val(harga_jual);
+                $('.stok').val(stok);
+                $('.id_barang2').val(id_barang);
+            });
+            //tampilkan modal hapus record
+            $('#mytable').on('click', '.delete', function () {
+                var product_id = $(this).data('id');
+                $('#DeleteModal').modal('show');
+                $('.product_id2').val(product_id);
+            });
+
+        });
+    </script>
+    <script>
+        function hanyaAngka(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#mytable').DataTable();
+        });
+    </script>
+    <script>
+        $('#itemExist').hide();
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('error');
+        if (myParam) {
+            $('#itemExist span#pesanError').text(myParam);
+            $('#itemExist').show();
+        }
+    </script>
+</body>
+
+</html>
